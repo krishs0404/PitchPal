@@ -1,0 +1,56 @@
+# Email Summarizer Configuration
+
+# Application settings
+app:
+  name: "Email Summarizer"
+  version: "0.1.0"
+  host: "0.0.0.0"
+  port: 8000
+  debug: true
+  log_level: "INFO"
+
+# API keys (replace with your actual keys or use environment variables)
+api_keys:
+  openai: ${OPENAI_API_KEY}
+  sendgrid: ${SENDGRID_API_KEY}
+  nylas: ${NYLAS_API_KEY}
+  pinecone: ${PINECONE_API_KEY}
+
+# Email settings
+email:
+  provider: "sendgrid"  # Options: sendgrid, nylas
+  default_sender: "you@example.com"
+  default_sender_name: "Your Name"
+  tracking:
+    open_tracking: true
+    click_tracking: true
+  followup:
+    enabled: true
+    default_delay_days: 3
+
+# Database settings
+database:
+  url: ${DATABASE_URL}
+  type: "postgresql"
+  pool_size: 5
+  max_overflow: 10
+
+# Personalization settings
+personalization:
+  sources:
+    - linkedin
+    - company
+    - news
+    - past_interactions
+  vector_db:
+    provider: "pinecone"  # Options: pinecone, weaviate
+    index_name: "email-summarizer"
+    dimensions: 768
+
+# LLM settings
+llm:
+  provider: "openai"  # Options: openai, local
+  model: "gpt-4"
+  temperature: 0.7
+  max_tokens: 800
+  embedding_model: "text-embedding-ada-002"

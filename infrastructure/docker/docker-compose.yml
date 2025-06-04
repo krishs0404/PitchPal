@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  api_service:
+    build:
+      context: ../../services/api_service
+      dockerfile: ../../infrastructure/docker/Dockerfile.api
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - VECTOR_SERVICE_URL=http://vector_service:8001
+      - ML_SERVICE_URL=http://ml_service:8002
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - HUBSPOT_API_KEY=${HUBSPOT_API_KEY}
+    depends_on:
+      - vector_service
+      - ml_service
+    networks:
+      - cold_email_io_network
+    volumes:
+      - ../../services/api_service:/app
+    restart: unless-stopped
+
+  vector_service:
+    build:
+      context: ../../services/vector_service
+      dockerfile: ../../infrastructure/docker/Dockerfile.vector
+    ports:
+      - "8001:8001"
+    environment:
+      - PORT=8001
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PINECONE_API_KEY=${PINECONE_API_KEY}
+      - PINECONE_ENVIRONMENT=${PINECONE_ENVIRONMENT}
+      - PINECONE_INDEX=${PINECONE_INDEX}
+    networks:
+      - cold_email_io_network
+    volumes:
+      - ../../services/vector_service:/app
+    restart: unless-stopped
+
+  ml_service:
+    build:
+      context: ../../services/ml_service
+      dockerfile: ../../infrastructure/docker/Dockerfile.ml
+    ports:
+      - "8002:8002"
+    environment:
+      - PORT=8002
+    networks:
+      - cold_email_io_network
+    volumes:
+      - ../../services/ml_service:/app
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ../../frontend/next-app
+      dockerfile: ../../infrastructure/docker/Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - api_service
+    networks:
+      - cold_email_io_network
+    volumes:
+      - ../../frontend/next-app:/app
+    restart: unless-stopped
+
+networks:
+  cold_email_io_network:
+    driver: bridge

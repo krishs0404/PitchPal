@@ -1,0 +1,36 @@
+# Core dependencies
+fastapi==0.100.0
+uvicorn==0.23.0
+pydantic==2.0.3
+
+# LLM Integration
+openai==1.0.0
+langchain==0.0.267
+
+# Data retrieval and processing
+beautifulsoup4==4.12.2
+requests==2.31.0
+selenium==4.10.0
+webdriver-manager==3.8.6
+
+# Vector storage
+pinecone-client==2.2.2
+sentence-transformers==2.2.2
+
+# Email delivery and tracking
+sendgrid==6.10.0
+nylas==5.15.1
+
+# Database
+sqlalchemy==2.0.19
+psycopg2-binary==2.9.6
+alembic==1.11.1
+
+# Frontend (if using API with frontend)
+python-multipart==0.0.6
+jinja2==3.1.2
+
+# Utilities
+python-dotenv==1.0.0
+pyyaml==6.0.1
+pytest==7.4.0
